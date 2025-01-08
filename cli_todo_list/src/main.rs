@@ -1,4 +1,3 @@
-use std::fs; // For file operations
 use std::io; // For input/output operations // For storing todos
 
 //Define a struct for Todo Items
@@ -84,4 +83,66 @@ impl TodoList {
     }
 }
 
-fn main() {}
+fn main() {
+    let mut todo_list = TodoList { items: Vec::new() };
+
+    loop {
+        println!("--- Todo CLI ---");
+        println!("1. Add a Todo");
+        println!("2. Complete a Todo");
+        println!("3. Delete a Todo");
+        println!("4. List Todos");
+        println!("5. Exit");
+        println!("Enter your choice:");
+
+        let choice = read_input_u32();
+
+        match choice {
+            1 => {
+                println!("Enter the description of the new todo:");
+                let description = read_input_string();
+                todo_list.add_item(description);
+            }
+            2 => {
+                println!("Enter the ID of the todo to mark as completed:");
+                let id = read_input_u32();
+                todo_list.complete_item(id);
+            }
+            3 => {
+                println!("Enter the ID of the todo to delete:");
+                let id = read_input_u32();
+                todo_list.delete_item(id);
+            }
+            4 => todo_list.list_items(),
+            5 => {
+                println!("Exiting Todo CLI. Goodbye!");
+                break;
+            }
+            _ => println!("Invalid choice. Please try again."),
+        }
+    }
+}
+
+// Reads a line of input from the user and returns it as a string.
+fn read_input_string() -> String {
+    let mut input = String::new();
+    io::stdin()
+        .read_line(&mut input)
+        .expect("Failed to read input");
+    input.trim().to_string()
+}
+
+// Reads a line of input from the user and returns it as a u32.
+fn read_input_u32() -> u32 {
+    let mut input = String::new();
+    io::stdin()
+        .read_line(&mut input)
+        .expect("Failed to read input");
+    match input.trim().parse::<u32>() {
+        Ok(num) => num,
+        Err(_) => {
+            println!("Invalid input, please enter a number.");
+            0
+        }
+    }
+}
