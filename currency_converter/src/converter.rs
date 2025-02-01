@@ -33,7 +33,7 @@ impl CurrencyConverter {
 
         if response.success {
             response
-                .rates
+                .quotes
                 .get(to)
                 .cloned()
                 .ok_or_else(|| "Target currency not found.".to_string())
